@@ -580,7 +580,7 @@ class ReadRowsPage(object):
             stacklevel=2,
         )
         try:
-            import pandas_gbq.arrow
+            import pandas_gbq.arrow  # type: ignore[import-not-found]
 
             if hasattr(pandas_gbq.arrow, "from_read_rows_response"):
                 if hasattr(self._stream_parser, "_parse_arrow_schema"):

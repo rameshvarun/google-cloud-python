@@ -437,9 +437,16 @@ def test_to_arrow_delegates_to_pandas_gbq_when_installed(mut):
         [pyarrow.array([100])], names=["id"]
     )
 
-    with mock.patch(
-        "pandas_gbq.arrow.from_read_rows_response", return_value=expected_batch
-    ) as mock_delegate:
+    mock_arrow_module = mock.Mock()
+    mock_arrow_module.from_read_rows_response.return_value = expected_batch
+
+    mock_pandas_gbq = mock.Mock()
+    mock_pandas_gbq.arrow = mock_arrow_module
+
+    with mock.patch.dict(
+        "sys.modules",
+        {"pandas_gbq": mock_pandas_gbq, "pandas_gbq.arrow": mock_arrow_module},
+    ):
         with pytest.warns(
             PendingDeprecationWarning,
             match="google-cloud-bigquery-storage is deprecated",
@@ -447,7 +454,7 @@ def test_to_arrow_delegates_to_pandas_gbq_when_installed(mut):
             actual_batch = page.to_arrow()
 
     assert actual_batch == expected_batch
-    mock_delegate.assert_called_once_with(
+    mock_arrow_module.from_read_rows_response.assert_called_once_with(
         mock_message, arrow_schema=mock_parser._schema
     )
 
