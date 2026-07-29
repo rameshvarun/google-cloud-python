@@ -25,6 +25,8 @@ logger = logging.Logger(__name__)
 
 __version__ = pandas_gbq_version.__version__
 
+from pandas_gbq import arrow
+
 __all__ = [
     "__version__",
     "to_gbq",
@@ -32,4 +34,5 @@ __all__ = [
     "Context",
     "context",
     "sample",
+    "arrow",
 ]
