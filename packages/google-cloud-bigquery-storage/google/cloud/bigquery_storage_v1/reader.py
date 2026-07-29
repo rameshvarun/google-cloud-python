@@ -582,7 +582,9 @@ class ReadRowsPage(object):
         try:
             import pandas_gbq.arrow
             if hasattr(pandas_gbq.arrow, "from_read_rows_response"):
-                arrow_schema = getattr(self._stream_parser, "_arrow_schema", None)
+                if hasattr(self._stream_parser, "_parse_arrow_schema"):
+                    self._stream_parser._parse_arrow_schema()
+                arrow_schema = getattr(self._stream_parser, "_schema", None)
                 return pandas_gbq.arrow.from_read_rows_response(self._message, arrow_schema=arrow_schema)
         except ImportError:
             pass
