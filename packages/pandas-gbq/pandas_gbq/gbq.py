@@ -67,7 +67,7 @@ def _test_google_api_imports():
         # Remove this comment and the ignore pragma upon completing:
         # https://github.com/googleapis/google-cloud-python/issues/17045
         from google_auth_oauthlib.flow import (
-            InstalledAppFlow,  # type: ignore[import-untyped] # noqa: F401
+            InstalledAppFlow,  # type: ignore[import-untyped] # noqa: F401 # fmt: skip
         )
     except ImportError as ex:  # pragma: NO COVER
         raise ImportError("pandas-gbq requires google-auth-oauthlib") from ex
