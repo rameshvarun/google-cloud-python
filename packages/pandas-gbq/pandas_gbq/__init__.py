@@ -6,6 +6,7 @@ import logging
 import sys
 import warnings
 
+from pandas_gbq import arrow
 from pandas_gbq import version as pandas_gbq_version
 from pandas_gbq.contexts import Context, context
 from pandas_gbq.core.sample import sample
@@ -24,8 +25,6 @@ if sys.version_info < (3, 10):
 logger = logging.Logger(__name__)
 
 __version__ = pandas_gbq_version.__version__
-
-from pandas_gbq import arrow
 
 __all__ = [
     "__version__",
