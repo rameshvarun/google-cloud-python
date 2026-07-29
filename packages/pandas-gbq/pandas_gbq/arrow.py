@@ -10,7 +10,7 @@ def from_read_rows_response(
 ) -> pa.RecordBatch:
     """Decodes a ReadRowsResponse protobuf message into a pyarrow.RecordBatch."""
     if not hasattr(message, "arrow_record_batch") or not message.arrow_record_batch.serialized_record_batch:
-        empty_schema = arrow_schema or pa.schema([])
+        return pa.RecordBatch.from_arrays([], schema=arrow_schema or pa.schema([]))
         return pa.RecordBatch.from_pylist([], schema=empty_schema)
 
     serialized_batch = message.arrow_record_batch.serialized_record_batch
