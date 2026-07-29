@@ -38,3 +38,12 @@ def test_from_read_rows_response_empty_message_returns_empty_batch():
 
     assert result_batch.num_rows == 0
     assert result_batch.schema == schema
+
+
+def test_from_read_rows_response_uninstalled_pyarrow_raises_import_error():
+    mock_message = mock.MagicMock()
+
+    with mock.patch.object(pandas_gbq.arrow, "pa", None):
+        import pytest
+        with pytest.raises(ImportError, match="pyarrow is required"):
+            pandas_gbq.arrow.from_read_rows_response(mock_message)
