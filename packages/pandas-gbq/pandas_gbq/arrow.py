@@ -1,4 +1,5 @@
 """Arrow integration submodule for pandas-gbq."""
+
 from typing import Any, Optional
 
 try:
@@ -18,7 +19,10 @@ def from_read_rows_response(
             "Please install pyarrow to use this function."
         )
 
-    if not hasattr(message, "arrow_record_batch") or not message.arrow_record_batch.serialized_record_batch:
+    if (
+        not hasattr(message, "arrow_record_batch")
+        or not message.arrow_record_batch.serialized_record_batch
+    ):
         empty_schema = arrow_schema or pa.schema([])
         return pa.RecordBatch.from_pylist([], schema=empty_schema)
 
@@ -36,5 +40,9 @@ def from_read_rows_response(
         return reader.read_next_batch()
     except Exception:
         msg = pa.ipc.read_message(buffer)
-        batch_schema = arrow_schema if arrow_schema is not None else getattr(msg, "schema", pa.schema([]))
+        batch_schema = (
+            arrow_schema
+            if arrow_schema is not None
+            else getattr(msg, "schema", pa.schema([]))
+        )
         return pa.ipc.read_record_batch(msg, batch_schema)

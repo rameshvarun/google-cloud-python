@@ -45,5 +45,6 @@ def test_from_read_rows_response_uninstalled_pyarrow_raises_import_error():
 
     with mock.patch.object(pandas_gbq.arrow, "pa", None):
         import pytest
+
         with pytest.raises(ImportError, match="pyarrow is required"):
             pandas_gbq.arrow.from_read_rows_response(mock_message)
