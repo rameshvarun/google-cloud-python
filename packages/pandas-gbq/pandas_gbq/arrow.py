@@ -17,10 +17,12 @@ def from_read_rows_response(
     if not hasattr(message, "arrow_record_batch") or not message.arrow_record_batch.serialized_record_batch:
         return pa.RecordBatch.from_arrays([], schema=arrow_schema or pa.schema([]))
         return pa.RecordBatch.from_pylist([], schema=empty_schema)
-
     serialized_batch = message.arrow_record_batch.serialized_record_batch
-    buffer = pa.py_buffer(serialized_batch)
-
+    reader = pa.ipc.RecordBatchStreamReader(serialized_batch)
+    try:
+        return reader.read_next_batch()
+    except StopIteration:
+        return pa.RecordBatch.from_arrays([], schema=arrow_schema or pa.schema([]))
     if arrow_schema is not None:
         try:
             return pa.ipc.read_record_batch(buffer, arrow_schema)
