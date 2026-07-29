@@ -2,10 +2,9 @@ from unittest import mock
 
 import pandas_gbq.arrow
 import pyarrow as pa
-import pytest
 
 
-def test_from_read_rows_response_deserializes_batch():
+def test_from_read_rows_response_valid_message_returns_record_batch():
     schema = pa.schema([("id", pa.int64()), ("name", pa.string())])
     batch = pa.RecordBatch.from_arrays(
         [pa.array([1, 2]), pa.array(["alice", "bob"])], schema=schema
@@ -28,7 +27,7 @@ def test_from_read_rows_response_deserializes_batch():
     assert result_batch.column(1).to_pylist() == ["alice", "bob"]
 
 
-def test_from_read_rows_response_handles_empty_message():
+def test_from_read_rows_response_empty_message_returns_empty_batch():
     schema = pa.schema([("val", pa.float64())])
     mock_message = mock.MagicMock()
     mock_message.arrow_record_batch.serialized_record_batch = b""
