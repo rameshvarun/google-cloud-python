@@ -6,8 +6,13 @@ import pyarrow as pa
 
 def from_read_rows_response(
     message: Any,
-    arrow_schema: Optional[pa.Schema] = None,
-) -> pa.RecordBatch:
+    arrow_schema: Optional["pa.Schema"] = None,
+) -> "pa.RecordBatch":
+    if pa is None:
+        raise ImportError(
+            "pyarrow is required to use 'from_read_rows_response'. "
+            "Please install pyarrow to use this function."
+        )
     """Decodes a ReadRowsResponse protobuf message into a pyarrow.RecordBatch."""
     if not hasattr(message, "arrow_record_batch") or not message.arrow_record_batch.serialized_record_batch:
         return pa.RecordBatch.from_arrays([], schema=arrow_schema or pa.schema([]))
