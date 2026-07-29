@@ -23,7 +23,7 @@ def test_from_read_rows_response_valid_message_returns_record_batch():
     )
 
     assert result_batch.num_rows == 2
-    assert result_batch.column_names == ["id", "name"]
+    assert result_batch.schema.names == ["id", "name"]
     assert result_batch.column(0).to_pylist() == [1, 2]
     assert result_batch.column(1).to_pylist() == ["alice", "bob"]
 

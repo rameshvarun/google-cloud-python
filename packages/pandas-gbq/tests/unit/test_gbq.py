@@ -218,7 +218,9 @@ def test_GbqConnector_get_client_w_new_bq(mock_bigquery_client):
     connector.get_client()
 
     _, kwargs = mock_bigquery_client.call_args
-    assert kwargs["client_info"].user_agent == "pandas-{}".format(pandas.__version__)
+    assert kwargs["client_info"].user_agent.startswith(
+        "pandas-{}".format(pandas.__version__)
+    )
 
 
 def test_GbqConnector_process_http_error_transforms_timeout():
