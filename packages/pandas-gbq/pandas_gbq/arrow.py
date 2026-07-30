@@ -41,9 +41,5 @@ def from_read_rows_response(
         return reader.read_next_batch()
     except Exception:
         msg = pa.ipc.read_message(buffer)
-        batch_schema = (
-            arrow_schema
-            if arrow_schema is not None
-            else getattr(msg, "schema", pa.schema([]))
-        )
+        batch_schema = arrow_schema if arrow_schema is not None else pa.schema([])
         return pa.ipc.read_record_batch(msg, batch_schema)
