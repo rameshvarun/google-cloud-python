@@ -19,14 +19,15 @@ def from_read_rows_response(
             "Please install pyarrow to use this function."
         )
 
+    arrow_record_batch = getattr(message, "arrow_record_batch", None)
     if (
-        not hasattr(message, "arrow_record_batch")
-        or not message.arrow_record_batch.serialized_record_batch
+        arrow_record_batch is None
+        or not getattr(arrow_record_batch, "serialized_record_batch", None)
     ):
         empty_schema = arrow_schema or pa.schema([])
         return pa.RecordBatch.from_pylist([], schema=empty_schema)
 
-    serialized_batch = message.arrow_record_batch.serialized_record_batch
+    serialized_batch = arrow_record_batch.serialized_record_batch
     buffer = pa.py_buffer(serialized_batch)
 
     if arrow_schema is not None:
