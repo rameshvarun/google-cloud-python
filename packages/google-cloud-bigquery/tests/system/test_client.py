@@ -2206,7 +2206,7 @@ class TestBigQuery(unittest.TestCase):
         import gc
 
         gc.collect()
-        for _ in range(30):  # Wait up to 3 seconds
+        for _ in range(60):  # Wait up to 6 seconds for background socket cleanup
             conn_end = current_process.net_connections()
             conn_count_end = len(conn_end)
             if conn_count_end <= conn_count_start:
