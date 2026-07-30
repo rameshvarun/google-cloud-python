@@ -20,9 +20,8 @@ def from_read_rows_response(
         )
 
     arrow_record_batch = getattr(message, "arrow_record_batch", None)
-    if (
-        arrow_record_batch is None
-        or not getattr(arrow_record_batch, "serialized_record_batch", None)
+    if arrow_record_batch is None or not getattr(
+        arrow_record_batch, "serialized_record_batch", None
     ):
         empty_schema = arrow_schema or pa.schema([])
         return pa.RecordBatch.from_pylist([], schema=empty_schema)
